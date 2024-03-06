@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../styles/custom-video-controls.css" />
+    <title>custom-video-controls</title>
+  </head>
+  <body>
+    <main>
+      <video id="video" src="./video/frozen.mp4" poster="./image/frozen.jpg" width="500px" height="500px"> </video>
+      <section id="controls">
+        <div>
+          <input type="range" min="0" id="durationRange" value="0" />
+          <span id="current">0</span>/<span id="duration"></span>
+        </div>
+        <div>
+          <input type="button" value="Play" id="play" />
+          <input type="button" value="Stop" id="stop" />
+          <input type="button" value="&lt;&lt;" id="reset" />
+          <input type="button" value="&lt;" id="back" />
+          <input type="button" value="&gt;" id="forward" />
+          <input type="button" value="&gt;&gt;" id="end" />
+          <input type="range" min="0" max="1" step=".2" id="vol" />
+          <input type="button" value="Mute" id="mute" />
+        </div>
+        <div>
+          <label for="speed">Speed</label>
+          <input type="range" id="speed" min="0" max="16" step="2" value="0" />
+        </div>
+      </section>
+    </main>
+    <script>
+         var vid = document.getElementsByTagName('video')[0];
+         var pause = document.getElementById('stop');
+         var btnPlay = document.getElementById('play');
+         var mute = document.getElementById('mute');
+         var volumeRange = document.getElementById('vol');
+         var durationRange = document.getElementById('durationRange')
+         var currentTime = document.getElementById('current')
+         var totalTime = document.getElementById('duration')
+         var reset = document.getElementById('reset')
+         var end = document.getElementById('end')
+         var speedRange = document.getElementById('speed')
+         var back = document.getElementById('back')
+         var forward = document.getElementById('forward')
+
+
+       btnPlay.onclick = function () {
+        vid.play();
+      };
+      pause.onclick = function () {
+        vid.pause();
+      };
+      mute.onclick = function () {
+        if (vid.muted) {
+          vid.muted = false;
+          volumeRange.value = '1';
+        } else {
+          vid.muted = true;
+          volumeRange.value = '0';
+        }
+      };
+      volumeRange.oninput = function (e) {
+        vid.volume = +e.target.value;
+      };
+      speedRange.oninput = function (e) {
+        vid.playbackRate = +e.target.value;
+      };
+
+     vid.addEventListener("timeupdate", function () {
+        durationRange.value = vid.currentTime;
+        currentTime.textContent = formatoftime(vid.currentTime);
+        totalTime.textContent = formatoftime(vid.duration);
+        
+    });
+
+      reset.onclick = function () {
+        vid.currentTime = 0;
+      };
+      end.onclick = function () {
+        vid.currentTime = vid.duration;
+      };
+      back.onclick = function () {
+        vid.currentTime = vid.currentTime - 10;
+      };
+      forward.onclick = function () {
+        vid.currentTime = vid.currentTime + 10;
+      };
+
+      function formatoftime(time) {
+        var minutes = Math.floor(time / 60);
+        var seconds = Math.floor(time % 60);
+        return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+    }
+    </script>
+  </body>
+</html>
